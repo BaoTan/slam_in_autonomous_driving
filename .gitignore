@@ -38,6 +38,7 @@
 *.toc
 *.gz
 *.bbl
+*.bag
 
 # cmake
 **build**
