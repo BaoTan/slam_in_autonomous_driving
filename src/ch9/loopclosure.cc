@@ -97,7 +97,7 @@ void LoopClosure::ComputeLoopCandidates() {
     }
     LOG(INFO) << "success: " << succ_candidates.size() << "/" << loop_candiates_.size();
 
-    loop_candiates_.swap(succ_candidates);
+    loop_candiates_.swap(succ_candidates);  // 完全交换两个容器的内容
 }
 
 void LoopClosure::ComputeForCandidate(sad::LoopCandidate& c) {
@@ -170,7 +170,7 @@ void LoopClosure::ComputeForCandidate(sad::LoopCandidate& c) {
         ndt.setInputSource(rough_map2);
 
         ndt.align(*output, Tw2);
-        Tw2 = ndt.getFinalTransformation();
+        Tw2 = ndt.getFinalTransformation();//T_source2target
     }
 
     Mat4d T = Tw2.cast<double>();
@@ -179,6 +179,9 @@ void LoopClosure::ComputeForCandidate(sad::LoopCandidate& c) {
     Vec3d t = T.block<3, 1>(0, 3);
     c.Tij_ = kf1->opti_pose_1_.inverse() * SE3(q, t);
     c.ndt_score_ = ndt.getTransformationProbability();
+    // if (c.ndt_score_ > 0.95) {
+    //     LOG(INFO) << "c.ndt_score_ = " << c.ndt_score_;
+    // }
 }
 
 void LoopClosure::SaveResults() {

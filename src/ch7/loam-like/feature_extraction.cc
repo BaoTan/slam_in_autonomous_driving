@@ -32,6 +32,11 @@ void FeatureExtraction::Extract(FullCloudPtr pc_in, CloudPtr pc_out_edge, CloudP
 
         std::vector<IdAndValue> cloud_curvature;  // 每条线对应的曲率
         int total_points = scans_in_each_line[i]->points.size() - 10;
+
+        // 计算每天激光线上，每个点的曲率，曲率表示表面的弯曲程序，这人分别从xyz轴去量化点的分散程度，结合后可以看做该点在线上的曲率
+        // ​高曲率点：通常被选为边缘特征（EdgeFeature），用于匹配和位姿估计
+        // ​低曲率点：通常被选为平面特征（Planar Feature）
+        
         for (int j = 5; j < (int)scans_in_each_line[i]->points.size() - 5; j++) {
             // 两头留一定余量，采样周围10个点取平均值
             double diffX = scans_in_each_line[i]->points[j - 5].x + scans_in_each_line[i]->points[j - 4].x +
@@ -57,6 +62,7 @@ void FeatureExtraction::Extract(FullCloudPtr pc_in, CloudPtr pc_out_edge, CloudP
         }
 
         // 对每个区间选取特征，把360度分为6个区间
+        // (这样划分是为了特征均匀化，不然有可能这条线上的所有角点特征都在某个小的角度范围内)
         for (int j = 0; j < 6; j++) {
             int sector_length = (int)(total_points / 6);
             int sector_start = sector_length * j;
@@ -93,7 +99,8 @@ void FeatureExtraction::ExtractFromSector(const CloudPtr &pc_in, std::vector<IdA
 
             largest_picked_num++;
             picked_points.push_back(ind);
-
+            
+            // 每个60度的范围内最多只是提取20个角点
             if (largest_picked_num <= 20) {
                 pc_out_edge->push_back(pc_in->points[ind]);
                 point_info_count++;

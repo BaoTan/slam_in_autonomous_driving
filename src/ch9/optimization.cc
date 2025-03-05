@@ -264,10 +264,16 @@ void Optimization::RemoveOutliers() {
         }
     };
 
+    if (gnss_trans_edge_.size() > 0) {
+        LOG(INFO) << "gnss_trans_edge_: e->robustKernel()->delta() = " << gnss_trans_edge_[0]->robustKernel()->delta();
+    }
     std::for_each(gnss_edge_.begin(), gnss_edge_.end(), remove_outlier);
     std::for_each(gnss_trans_edge_.begin(), gnss_trans_edge_.end(), remove_outlier);
     LOG(INFO) << "gnss outlier: " << cnt_outlier_removed << "/" << gnss_edge_.size() + gnss_trans_edge_.size();
 
+    if (loop_edge_.size() > 0) {
+        LOG(INFO) << "loop_edge_: e->robustKernel()->delta() = " << loop_edge_[0]->robustKernel()->delta();
+    }
     cnt_outlier_removed = 0;
     std::for_each(loop_edge_.begin(), loop_edge_.end(), remove_outlier);
     LOG(INFO) << "loop outlier: " << cnt_outlier_removed << "/" << loop_edge_.size();
