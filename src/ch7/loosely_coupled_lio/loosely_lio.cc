@@ -145,7 +145,7 @@ void LooselyLIO::Align() {
     voxel.setInputCloud(current_scan);
 
     CloudPtr current_scan_filter(new PointCloudType);
-    voxel.filter(*current_scan_filter);
+    voxel.filter(*current_scan_filter);  // 对current_scan点云数据将进行下采样存储在current_scan_filter
 
     /// 处理首帧雷达数据
     if (flg_first_scan_) {

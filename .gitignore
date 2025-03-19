@@ -49,6 +49,7 @@ data/ch6/frame*.txt
 data/ch6/*.png
 data/ch7/**.pcd
 **DS_Store
+.vscode/**
 
 data/ch9/**.pcd
 data/ch3/state.txt
