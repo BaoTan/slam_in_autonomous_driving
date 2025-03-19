@@ -74,5 +74,8 @@
         "variant": "cpp",
         "core": "cpp",
         "numericaldiff": "cpp"
-    }
+    },
+    "C_Cpp.formatting": "clangFormat",
+    "editor.formatOnSave": true,
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format", // 根据实际路径修改
 }
